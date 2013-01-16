@@ -1,4 +1,4 @@
-[![build status](https://secure.travis-ci.org/doug-martin/object-extended.png)](http://travis-ci.org/doug-martin/object-extended)
+[![Build Status](https://travis-ci.org/doug-martin/object-extended.png?branch=master)](undefined)
 
 # object-extended
 
