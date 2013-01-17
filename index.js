@@ -1,8 +1,8 @@
 (function () {
     "use strict";
-    /*global extender isExtended*/
+    /*global extended isExtended*/
 
-    function defineObject(extender, is) {
+    function defineObject(extended, is) {
 
         var deepEqual = is.deepEqual,
             isHash = is.isHash;
@@ -40,7 +40,7 @@
         }
 
 
-        function merge(obj, props) {
+        function merge(obj) {
             if (!obj) {
                 obj = {};
             }
@@ -50,7 +50,7 @@
             return obj; // Object
         }
 
-        function deepMerge(obj, props) {
+        function deepMerge(obj) {
             if (!obj) {
                 obj = {};
             }
@@ -160,7 +160,7 @@
 
         };
 
-        var ret = extender.define(is.isObject, obj).define(isHash, hash).define(is.isFunction, {extend: extend}).expose({hash: hash}).expose(obj);
+        var ret = extended.define(is.isObject, obj).define(isHash, hash).define(is.isFunction, {extend: extend}).expose({hash: hash}).expose(obj);
         var orig = ret.extend;
         ret.extend = function __extend() {
             if (arguments.length === 1) {
@@ -175,15 +175,15 @@
 
     if ("undefined" !== typeof exports) {
         if ("undefined" !== typeof module && module.exports) {
-            module.exports = defineObject(require("extender"), require("is-extended"));
+            module.exports = defineObject(require("extended"), require("is-extended"));
 
         }
     } else if ("function" === typeof define) {
         define(["require"], function (require) {
-            return defineObject(require("extender"), require("is-extended"));
+            return defineObject(require("extended"), require("is-extended"));
         });
     } else {
-        this.objectExtended = defineObject(extender, isExtended);
+        this.objectExtended = defineObject(extended, isExtended);
     }
 
 }).call(this);
