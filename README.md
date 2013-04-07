@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/doug-martin/object-extended.png?branch=master)](undefined)
+[![Build Status](https://travis-ci.org/doug-martin/object-extended.png?branch=master)](https://travis-ci.org/doug-martin/object-extended)
 
-[![browser support](http://ci.testling.com/doug-martin/object-extended.png)](http://ci.testling.com/doug-martin/object-extended)
+[![browser support](https://ci.testling.com/doug-martin/object-extended.png)](https://ci.testling.com/doug-martin/object-extended)
 
 # object-extended
 
@@ -150,6 +150,20 @@ var myObj = {a : "b", c : "d", e : "f"};
 obj(myObj).invert(); //{b : "a", d : "c", f : "e"}
 
 obj.hash.invert(myObj); //{b : "a", d : "c", f : "e"}
+```
+
+**`hash.omit`**
+
+
+Returns a new hash that is the with the given keys omitted.
+
+```javascript
+var myObj = {a : "b", c : "d", e : "f"};
+obj(myObj).omit("e"); //{a : "b", c : "d"}
+obj(myObj).omit(["c", "e"]); //{a : "b"}
+
+obj.hash.omit(myObj, "e"); //{a : "b", c : "d"}
+obj.hash.omit(myObj, ["c", "e"]); //{a : "b"}
 ```
 
 

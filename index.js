@@ -2,15 +2,19 @@
     "use strict";
     /*global extended isExtended*/
 
-    function defineObject(extended, is) {
+    function defineObject(extended, is, arr) {
 
         var deepEqual = is.deepEqual,
-            isHash = is.isHash;
+            isString = is.isString,
+            isHash = is.isHash,
+            difference = arr.difference,
+            hasOwn = Object.prototype.hasOwnProperty,
+            isFunction = is.isFunction;
 
         function _merge(target, source) {
             var name, s;
             for (name in source) {
-                if (source.hasOwnProperty(name)) {
+                if (hasOwn.call(source, name)) {
                     s = source[name];
                     if (!(name in target) || (target[name] !== s)) {
                         target[name] = s;
@@ -23,8 +27,9 @@
         function _deepMerge(target, source) {
             var name, s, t;
             for (name in source) {
-                if (source.hasOwnProperty(name)) {
-                    s = source[name], t = target[name];
+                if (hasOwn.call(source, name)) {
+                    s = source[name];
+                    t = target[name];
                     if (!deepEqual(t, s)) {
                         if (isHash(t) && isHash(s)) {
                             target[name] = _deepMerge(t, s);
@@ -68,7 +73,7 @@
         }
 
         function forEach(hash, iterator, scope) {
-            if (!isHash(hash) || typeof iterator !== "function") {
+            if (!isHash(hash) || !isFunction(iterator)) {
                 throw new TypeError();
             }
             var objKeys = keys(hash), key;
@@ -80,7 +85,7 @@
         }
 
         function filter(hash, iterator, scope) {
-            if (!isHash(hash) || typeof iterator !== "function") {
+            if (!isHash(hash) || !isFunction(iterator)) {
                 throw new TypeError();
             }
             var objKeys = keys(hash), key, value, ret = {};
@@ -112,7 +117,7 @@
             }
             var ret = [];
             for (var i in hash) {
-                if (hash.hasOwnProperty(i)) {
+                if (hasOwn.call(hash, i)) {
                     ret.push(i);
                 }
             }
@@ -143,21 +148,37 @@
             return ret;
         }
 
+        function omit(hash, omitted) {
+            if (!isHash(hash)) {
+                throw new TypeError();
+            }
+            if (isString(omitted)) {
+                omitted = [omitted];
+            }
+            var objKeys = difference(keys(hash), omitted), key, ret = {};
+            for (var i = 0, len = objKeys.length; i < len; ++i) {
+                key = objKeys[i];
+                ret[key] = hash[key];
+            }
+            return ret;
+        }
+
         var hash = {
             forEach: forEach,
             filter: filter,
             invert: invert,
             values: values,
             toArray: toArray,
-            keys: keys
+            keys: keys,
+            omit: omit
         };
 
 
         var obj = {
             extend: extend,
             merge: merge,
-            deepMerge: deepMerge
-
+            deepMerge: deepMerge,
+            omit: omit
         };
 
         var ret = extended.define(is.isObject, obj).define(isHash, hash).define(is.isFunction, {extend: extend}).expose({hash: hash}).expose(obj);
@@ -175,15 +196,15 @@
 
     if ("undefined" !== typeof exports) {
         if ("undefined" !== typeof module && module.exports) {
-            module.exports = defineObject(require("extended"), require("is-extended"));
+            module.exports = defineObject(require("extended"), require("is-extended"), require("array-extended"));
 
         }
     } else if ("function" === typeof define) {
         define(["require"], function (require) {
-            return defineObject(require("extended"), require("is-extended"));
+            return defineObject(require("extended"), require("is-extended"), require("array-extended"));
         });
     } else {
-        this.objectExtended = defineObject(extended, isExtended);
+        this.objectExtended = defineObject(this.extended, this.isExtended, this.arrayExtended);
     }
 
 }).call(this);
