@@ -1,6 +1,6 @@
 {
   "name": "object-extended",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Additional object extensions with a chainable api",
   "main": "index.js",
   "scripts": {

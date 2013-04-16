@@ -200,8 +200,8 @@
 
         }
     } else if ("function" === typeof define) {
-        define(["require"], function (require) {
-            return defineObject(require("extended"), require("is-extended"), require("array-extended"));
+        define(["extended", "is-extended", "array-extended"], function (extended, is, array) {
+            return defineObject(extended, is, array);
         });
     } else {
         this.objectExtended = defineObject(this.extended, this.isExtended, this.arrayExtended);
